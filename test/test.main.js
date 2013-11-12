@@ -18,7 +18,7 @@ var p = new Personality({
 });
 
 var hash;
-var profileHash;
+var secHash;
 
 var profile = {
   hash: 'ricard.solecasas@gmail.com',
@@ -88,6 +88,42 @@ describe('personality', function () {
         pro.hash.should.eql(hash);
         pro.meta.should.eql(profileMerged.meta);
         done();
+      });
+    });
+  });
+
+  describe('.get', function () {
+    it('gets a profile which does not exist', function (done) {
+      p.get('banana', function (err, pro) {
+        should.exist(err);
+        done();
+      });
+    });
+
+    it('gets a profile', function (done) {
+      p.get(hash, function (err, pro){
+        should.exist(pro);
+        done();
+      });
+    });
+  });
+
+  describe('.del', function () {
+    it('deletes a profile', function (done) {
+      var newProfile = {
+        hash: 'ricard.can@gmail.com',
+        display: 'rsole_'
+      };
+      p.create(newProfile, function (err, pro) {
+        secHash = pro.hash;
+        p.del(secHash, function (err) {
+          setTimeout(function () {
+            p.get(secHash, function (err, prof) {
+              should.not.exist(prof);
+            });
+            done();
+          }, 500);
+        });
       });
     });
   });

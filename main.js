@@ -7,8 +7,6 @@ var crypto   = require('crypto');
 var KEY = 'personality!';
 var WHITELIST = ['hash', 'display', 'meta'];
 
-var shasum = crypto.createHash('sha1');
-
 Number.prototype.toRad = function () {
   return this * Math.PI / 180;
 };
@@ -54,8 +52,7 @@ var Personality = function (options) {
     } else if (!newUser.display) {
       callback(new Error('Invalid - display name can not be empty'));
     } else {
-      shasum.update(newUser.hash);
-      newUser.hash = shasum.digest('hex');
+      newUser.hash = require('crypto').createHash('sha1').update(newUser.hash).digest('hex');
 
 
       self.get(newUser.hash, function (err, profile) {
