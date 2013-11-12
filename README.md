@@ -1,5 +1,7 @@
 ## Personality
 
+[![Build Status](https://travis-ci.org/codinglion/node-personality.png)](https://travis-ci.org/codinglion/node-personality)
+
 Layer on top of node.js to deal with user profiles in persona. Inspired in great deal by node-prohibition (code looks rather similar).
 
 Stores emails in SHA1 so you never actually store the email.

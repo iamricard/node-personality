@@ -5,9 +5,9 @@ var Sublevel = require('level-sublevel');
 var crypto   = require('crypto');
 
 var KEY = 'personality!';
-var WHITELIST = ['display'];
+var WHITELIST = ['hash', 'display', 'meta'];
 
-var sha1sum = crypto.createHash('sha1');
+var shasum = crypto.createHash('sha1');
 
 Number.prototype.toRad = function () {
   return this * Math.PI / 180;
@@ -28,6 +28,7 @@ var Personality = function (options) {
 
   this.profile = {
     meta: options.meta || {},
+    content: {}
   };
 
   this.get = function (email, callback) {
@@ -46,24 +47,32 @@ var Personality = function (options) {
 
   var validateNewUser = function (newUser, callback) {
 
-    newUser.hash = self.sha1sum.update(newUser.hash).digest('hex');
-    self.get(newUser.hash, function (err, profile) {
-      if (!newUser) {
-        callback(new Error('Profile object empty'));
-      } else if (!newUser.hash) {
-        callback(new Error('Invalid - email is missing'));
-      } else if (newUser.hash === profile.hash) {
-        callback(new Error('Invalid - user already registered'));
-      } else {
-        if (self.get(newUser.hash))
-        callback(null, newUser);
-      }
-    });
+    if (!newUser) {
+      callback(new Error('Profile non-existent'));
+    } else if (!newUser.hash) {
+      callback(new Error('Invalid - email is missing'));
+    } else if (!newUser.display) {
+      callback(new Error('Invalid - display name can not be empty'));
+    } else {
+      shasum.update(newUser.hash);
+      newUser.hash = shasum.digest('hex');
+
+
+      self.get(newUser.hash, function (err, profile) {
+        if (!err) {
+          if (newUser.hash === profile.hash) {
+            callback(new Error('Invalid - user already registered'));
+          } else if (newUser.display === profile.display) {
+            callback(new Error('Invalid - display name in use'));
+          }
+        } else {
+          callback(null, newUser);
+        }
+      });
+    }
   };
 
   var setAll = function (profile, callback) {
-
-    profile.hash = self.sha1sum.update(profile.hash).digest('hex');
 
     if (!profile.meta) {
       profile.meta = {};
@@ -71,7 +80,7 @@ var Personality = function (options) {
 
     for (var attr in self.profile.meta) {
       if (!profile.meta[attr]) {
-        profile.meta[attr] = false;
+        profile.meta[attr] = null;
       }
     }
 
@@ -94,7 +103,7 @@ var Personality = function (options) {
   };
 
   this.create = function (newProfile, callback) {
-    validateUser(newProfile, function (err, profile) {
+    validateNewUser(newProfile, function (err, profile) {
       if (err) {
         callback(err);
       } else {
