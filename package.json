@@ -6,7 +6,7 @@
   "dependencies": {
     "level": ">= 0.10.0",
     "level-sublevel": ">= 4.7.1",
-    "leveldown": ">= 0.6.2",
+    "leveldown": ">= 0.6.2"
   },
   "devDependencies": {
     "mocha": ">= 1.9.0",
