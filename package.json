@@ -1,0 +1,25 @@
+{
+  "name": "personality",
+  "version": "0.0.1",
+  "description": "User profiles with persona, without storing e-mails",
+  "main": "main.js",
+  "dependencies": {
+    "level": ">= 0.10.0",
+    "level-sublevel": ">= 4.7.1",
+    "leveldown": ">= 0.6.2",
+  },
+  "devDependencies": {
+    "mocha": ">= 1.9.0",
+    "should": ">= 1.2.2"
+  },
+  "scripts": {
+    "test": "make test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/codinglion/personality"
+  },
+  "keywords": ["profile", "leveldb", "user", "mozilla-persona", "privacy"],
+  "author": "Ricard Sole <ricard.solecasas@gmail.com>",
+  "license": "MIT"
+}
