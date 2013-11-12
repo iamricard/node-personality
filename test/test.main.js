@@ -34,7 +34,7 @@ describe('personality', function () {
   });
 
   describe('.create', function () {
-    it('created an invalid user with no email', function (done) {
+    it('creates an invalid user with no email', function (done) {
       profile = null;
       p.create(profile, function (err, p) {
         should.exist(err);
