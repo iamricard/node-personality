@@ -1,6 +1,6 @@
 ## Personality
 
-[![Build Status](https://travis-ci.org/codinglion/node-personality.png)](https://travis-ci.org/codinglion/node-personality)
+[![Build Status](https://travis-ci.org/rcsole/node-personality.png)](https://travis-ci.org/rcsole/node-personality)
 
 Layer on top of node.js to deal with user profiles in persona. Inspired in great deal by node-prohibition (code looks rather similar).
 

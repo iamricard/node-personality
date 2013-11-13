@@ -17,7 +17,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/codinglion/personality"
+    "url": "https://github.com/rcsole/node-personality"
   },
   "keywords": ["profile", "leveldb", "user", "mozilla-persona", "privacy", "persona"],
   "author": "Ricard Sole <ricard.solecasas@gmail.com>",
