@@ -26,13 +26,13 @@ var Personality = function (options) {
 
   this.profile = {
     meta: options.meta || {},
-    content: {}
+    systemData: {}
   };
 
   this.get = function (email, callback) {
     self.db.get(KEY + email, function (err, profile) {
       if (err || !profile) {
-        callback(new Error('Not found ', err));
+        callback(new Error('Not found'));
       } else {
         if (typeof profile === 'object') {
           callback(null, profile);
@@ -43,33 +43,31 @@ var Personality = function (options) {
     });
   };
 
-  var validateNewUser = function (newUser, callback) {
+  var validateProperties = function (userProfile, callback) {
 
-    if (!newUser) {
+    if (!userProfile) {
       callback(new Error('Profile non-existent'));
-    } else if (!newUser.hash) {
+    } else if (!userProfile.hash) {
       callback(new Error('Invalid - email is missing'));
-    } else if (!newUser.display) {
+    } else if (!userProfile.display) {
       callback(new Error('Invalid - display name can not be empty'));
     } else {
-      newUser.hash = require('crypto').createHash('sha1').update(newUser.hash).digest('hex');
-
-
-      self.get(newUser.hash, function (err, profile) {
+      userProfile.hash = require('crypto').createHash('sha1').update(userProfile.hash).digest('hex');
+      self.get(userProfile.hash, function (err, profile) {
         if (!err) {
-          if (newUser.hash === profile.hash) {
+          if (userProfile.hash === profile.hash) {
             callback(new Error('Invalid - user already registered'));
-          } else if (newUser.display === profile.display) {
+          } else if (userProfile.display === profile.display) {
             callback(new Error('Invalid - display name in use'));
           }
         } else {
-          callback(null, newUser);
+          callback(null, userProfile);
         }
       });
     }
   };
 
-  var setAll = function (profile, callback) {
+  var setAll = function (profile, callback, isNew) {
 
     if (!profile.meta) {
       profile.meta = {};
@@ -87,8 +85,11 @@ var Personality = function (options) {
       }
     }
 
-    profile.content = self.profile.content;
-    profile.content.joined = Math.round(new Date() / 1000);
+    profile.systemData = self.profile.systemData;
+    if (isNew) {
+      profile.systemData.joined = Math.round(new Date() / 1000);
+    }
+    profile.systemData.updated = Math.round(new Date() / 1000);
 
     self.db.put(KEY + profile.hash, profile, function (err) {
       if (err) {
@@ -100,11 +101,42 @@ var Personality = function (options) {
   };
 
   this.create = function (newProfile, callback) {
-    validateNewUser(newProfile, function (err, profile) {
+    validateProperties(newProfile, function (err, profile) {
       if (err) {
         callback(err);
       } else {
-        setAll(profile, callback);
+        setAll(profile, callback, true);
+      }
+    });
+  };
+
+  var validateUpdate = function (profile, hash, callback) {
+    if (!profile) {
+      callback(new Error('Invalid - no profile'));
+    } else if (!profile.hash) {
+      callback(new Error('Invalid - no email'));
+    } else if (!profile.display) {
+      callback(new Error('Invalid - no display'));
+    } else {
+      self.get(hash, function (err, exProfile) {
+        if (err) {
+          callback(err);
+        } else {
+          for (var attr in exProfile.meta) {
+             profile.meta[attr] = exProfile.meta[attr];
+          }
+          callback(null, profile);
+        }
+      });
+    }
+  };
+
+  this.update = function (profile, hash, callback) {
+    validateUpdate(profile, hash, function (error, vProfile) {
+      if (error) {
+        callback(error);
+      } else {
+        setAll(vProfile, callback, false);
       }
     });
   };

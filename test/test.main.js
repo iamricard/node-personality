@@ -108,11 +108,24 @@ describe('personality', function () {
     });
   });
 
+  describe('.update', function () {
+    it('succesfully updates a profile display name', function (done) {
+      profile.display = 'rsole_';
+      p.update(profile, hash, function (err) {
+        should.not.exist(err);
+        p.get(hash, function (err, pro) {
+          pro.display.should.eql(profile.display);
+          done();
+        });
+      });
+    });
+  });
+
   describe('.del', function () {
     it('deletes a profile', function (done) {
       var newProfile = {
         hash: 'ricard.can@gmail.com',
-        display: 'rsole_'
+        display: '_rsole_'
       };
       p.create(newProfile, function (err, pro) {
         secHash = pro.hash;
