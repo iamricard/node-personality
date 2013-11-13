@@ -14,11 +14,11 @@ MIT License
 
 ```json
 {
-    hash: '6cceece8d166ad4e99ee0fe8a56cf06f2896a00c',
-    display: 'rsole',
-    systemData: {
-        joined: 1384302755,
-        updated: 1384302755
+    "hash": "6cceece8d166ad4e99ee0fe8a56cf06f2896a00c",
+    "display": "rsole",
+    "systemData": {
+        "joined": "1384302755",
+        "updated": "1384302755"
     }
 }
 ```
@@ -61,7 +61,7 @@ personality.create(profile, function (err, p) {
     console.log(p);
   }
 });
-```javascript
+```
 
 #### Get an existing profile
 
@@ -97,3 +97,4 @@ personality.del('6cceece8d166ad4e99ee0fe8a56cf06f2896a00c', function (err) {
     console.log('deleted!');
   }
 });
+```
