@@ -8,6 +8,12 @@ Stores emails in SHA1 so you never actually store the email.
 
 The purpose of this is to avoid Privacy Terms/Policy. If you need the email you can just ask the user for it. This is intended for apps that do NOT require emails to work.
 
+#### Important things to keep in mind:
+  * Display names are not unique(1)
+  * Might be broken somewhere, open an issue if so! =)
+
+  (1) Can be solved by storing a list of used display names
+
 MIT License
 
 ### Personality format (JSON)

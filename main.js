@@ -75,6 +75,7 @@ var Personality = function (options) {
 
     for (var attr in self.profile.meta) {
       if (!profile.meta[attr]) {
+        console.log(profile.meta[attr]);
         profile.meta[attr] = null;
       }
     }
@@ -122,8 +123,15 @@ var Personality = function (options) {
         if (err) {
           callback(err);
         } else {
+          console.log(profile);
+          console.log(exProfile);
+          if (!profile.meta) {
+            profile.meta = {};
+          }
           for (var attr in exProfile.meta) {
-             profile.meta[attr] = exProfile.meta[attr];
+            if (!profile.meta[attr]) {
+               profile.meta[attr] = exProfile.meta[attr];
+             }
           }
           callback(null, profile);
         }

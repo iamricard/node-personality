@@ -1,6 +1,6 @@
 {
   "name": "personality",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "User profiles with persona, without storing e-mails",
   "main": "main.js",
   "dependencies": {
